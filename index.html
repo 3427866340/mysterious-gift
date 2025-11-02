@@ -25,27 +25,114 @@ var _czc = _czc || [];
       align-items: center;
       justify-content: center;
       position: relative;
-      background: #888888;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(255, 182, 193, 0.8) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 192, 203, 0.9) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(255, 105, 180, 0.7) 0%, transparent 50%),
+        linear-gradient(135deg, #ffb6c1 0%, #ffc0cb 25%, #ff69b4 50%, #ffc0cb 75%, #ffb6c1 100%);
+      background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+      animation: backgroundShift 15s ease infinite;
       overflow: hidden;
       /* 优化渲染性能 */
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
 
-    /* 爱心动画 - 隐藏 */
+    /* 背景动画效果 */
+    @keyframes backgroundShift {
+      0% {
+        background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%;
+      }
+      25% {
+        background-position: 20% 30%, 80% 70%, 40% 10%, 10% 20%;
+      }
+      50% {
+        background-position: 40% 60%, 60% 40%, 20% 80%, 30% 50%;
+      }
+      75% {
+        background-position: 60% 40%, 40% 60%, 80% 20%, 50% 30%;
+      }
+      100% {
+        background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%;
+      }
+    }
+
+    /* 添加额外的背景层 */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        linear-gradient(45deg, transparent 30%, rgba(255, 192, 203, 0.3) 50%, transparent 70%),
+        linear-gradient(-45deg, transparent 30%, rgba(255, 182, 193, 0.3) 50%, transparent 70%);
+      background-size: 200px 200px, 200px 200px;
+      animation: patternMove 20s linear infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes patternMove {
+      0% {
+        background-position: 0 0, 0 0;
+      }
+      100% {
+        background-position: 200px 200px, -200px 200px;
+      }
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(ellipse at center, rgba(255, 105, 180, 0.2) 0%, transparent 70%);
+      animation: glow 8s ease-in-out infinite alternate;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    @keyframes glow {
+      0% {
+        opacity: 0.5;
+        transform: scale(1);
+      }
+      100% {
+        opacity: 0.8;
+        transform: scale(1.1);
+      }
+    }
+
+    /* 爱心动画 - 启用 */
     .heart {
-      display: none;
+      position: fixed;
+      bottom: -50px;
+      font-size: 20px;
+      animation: floatUp 8s linear forwards;
+      pointer-events: none;
+      z-index: 5;
+      user-select: none;
     }
 
     @keyframes floatUp {
       0% {
-        transform: translate3d(0, 100vh, 0) rotate(0deg);
+        transform: translate3d(0, 0, 0) rotate(0deg) scale(0.5);
         opacity: 0;
       }
       5% {
-        opacity: 0.6;
+        opacity: 0.8;
       }
       10% {
+        opacity: 1;
+        transform: translate3d(0, -10vh, 0) rotate(10deg) scale(1);
+      }
+      50% {
+        transform: translate3d(30px, -50vh, 0) rotate(180deg) scale(1.2);
         opacity: 1;
       }
       90% {
@@ -55,7 +142,7 @@ var _czc = _czc || [];
         opacity: 0.6;
       }
       100% {
-        transform: translate3d(50px, -100px, 0) rotate(360deg);
+        transform: translate3d(50px, -100vh, 0) rotate(360deg) scale(0.8);
         opacity: 0;
       }
     }
@@ -90,6 +177,101 @@ var _czc = _czc || [];
       }
     }
 
+    /* 粒子爱心容器 */
+    #particle-heart {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 3;
+      transform-origin: center center;
+    }
+
+    /* 爱心整体跳动动画 */
+    #particle-heart.beat {
+      animation: heartBeat 1.2s ease-in-out infinite;
+    }
+
+    @keyframes heartBeat {
+      0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+      }
+      10% {
+        transform: translate(-50%, -50%) scale(1.1);
+      }
+      20% {
+        transform: translate(-50%, -50%) scale(1);
+      }
+      30% {
+        transform: translate(-50%, -50%) scale(1.08);
+      }
+      40% {
+        transform: translate(-50%, -50%) scale(1);
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.05);
+      }
+      60% {
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+
+    /* 单个粒子样式 */
+    .particle {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 182, 193, 0.9) 70%, rgba(255, 105, 180, 0.8) 100%);
+      border-radius: 50%;
+      box-shadow: 0 0 8px rgba(255, 105, 180, 0.8), 
+                  0 0 15px rgba(255, 182, 193, 0.6),
+                  0 0 25px rgba(255, 192, 203, 0.4);
+      will-change: transform, opacity;
+      opacity: 0;
+      filter: brightness(1.2);
+    }
+
+    /* 粒子从四周飞到目标位置的动画 */
+    @keyframes particleFlyTo {
+      0% {
+        opacity: 0;
+        transform: translate(0, 0) scale(0);
+      }
+      5% {
+        opacity: 1;
+        transform: translate(calc(var(--target-x) * 0.05), calc(var(--target-y) * 0.05)) scale(1);
+      }
+      50% {
+        opacity: 1;
+        transform: translate(calc(var(--target-x) * 0.75), calc(var(--target-y) * 0.75)) scale(1.1);
+      }
+      95% {
+        opacity: 1;
+        transform: translate(var(--target-x), var(--target-y)) scale(1);
+      }
+      100% {
+        opacity: 0.8;
+        transform: translate(var(--target-x), var(--target-y)) scale(1);
+      }
+    }
+
+    /* 粒子形成后的脉动动画 */
+    @keyframes particlePulse {
+      0%, 100% {
+        opacity: 0.9;
+        transform: scale(1);
+        filter: brightness(1.2);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.4);
+        filter: brightness(1.5);
+      }
+    }
+
     /* 确保内容在背景之上 */
     #app {
       position: relative;
@@ -98,29 +280,41 @@ var _czc = _czc || [];
 
     /* 模态框增强样式 */
     .modal {
-      animation: slideInBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 8px 32px rgba(255, 105, 180, 0.3), 
+                  0 4px 16px rgba(255, 182, 193, 0.4),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.3);
       will-change: transform, opacity;
       transform: translateZ(0);
-      background: #ffffff;
-      border-radius: 8px;
+      background: linear-gradient(135deg, 
+                  rgba(255, 255, 255, 0.9) 0%, 
+                  rgba(255, 240, 245, 0.95) 50%,
+                  rgba(255, 228, 225, 0.9) 100%);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 192, 203, 0.5);
+      border-radius: 20px;
       padding: 0;
+      opacity: 0;
+      transform: translate3d(0, -30px, 0) scale(0.95);
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+      overflow: hidden;
     }
 
-    @keyframes slideInBounce {
+    /* 弹窗缓缓进入动画 */
+    .modal.show {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+      animation: gentleSlideIn 1.5s ease-out forwards;
+    }
+
+    @keyframes gentleSlideIn {
       0% {
         opacity: 0;
-        transform: translate3d(0, -50px, 0) scale(0.8);
-      }
-      40% {
-        opacity: 1;
-        transform: translate3d(0, 10px, 0) scale(1.05);
+        transform: translate3d(0, -30px, 0) scale(0.95);
       }
       60% {
-        transform: translate3d(0, -5px, 0) scale(0.98);
-      }
-      80% {
-        transform: translate3d(0, 3px, 0) scale(1.02);
+        opacity: 0.8;
+        transform: translate3d(0, 5px, 0) scale(1.02);
       }
       100% {
         opacity: 1;
@@ -128,22 +322,34 @@ var _czc = _czc || [];
       }
     }
 
-    /* 按钮样式 - 蓝色按钮 */
+    /* 模态框背景初始隐藏 */
+    .modal-backdrop {
+      opacity: 0;
+      transition: opacity 0.5s ease-out;
+    }
+
+    .modal-backdrop.show {
+      opacity: 1;
+    }
+
+    /* 按钮样式 - 粉色按钮 */
     .btn.primary {
-      transition: all 0.2s ease;
+      transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
-      background: #007bff;
-      border: 1px solid #0056b3;
-      border-radius: 4px;
-      padding: 8px 20px;
-      font-size: 14px;
-      font-weight: normal;
+      background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%);
+      border: 1px solid rgba(255, 192, 203, 0.5);
+      border-radius: 25px;
+      padding: 10px 28px;
+      font-size: 15px;
+      font-weight: 600;
       color: #ffffff;
       cursor: pointer;
-      box-shadow: none;
+      box-shadow: 0 4px 15px rgba(255, 105, 180, 0.4),
+                  0 2px 8px rgba(255, 182, 193, 0.3),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.2);
       text-transform: none;
-      letter-spacing: normal;
+      letter-spacing: 0.5px;
       z-index: 1;
       will-change: transform;
       transform: translateZ(0);
@@ -151,18 +357,26 @@ var _czc = _czc || [];
     }
 
     .btn.primary:hover {
-      background: #0056b3;
-      border-color: #004085;
+      background: linear-gradient(135deg, #ff1493 0%, #ff69b4 100%);
+      border-color: rgba(255, 192, 203, 0.7);
+      box-shadow: 0 6px 20px rgba(255, 105, 180, 0.5),
+                  0 4px 12px rgba(255, 182, 193, 0.4),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
     }
 
     .btn.primary:active {
-      background: #004085;
-      border-color: #003366;
+      background: linear-gradient(135deg, #dc1493 0%, #e91e63 100%);
+      border-color: rgba(255, 192, 203, 0.8);
+      box-shadow: 0 2px 10px rgba(255, 105, 180, 0.3),
+                  inset 0 2px 4px rgba(0, 0, 0, 0.1);
+      transform: translateY(0);
     }
 
     .btn.primary:focus {
       outline: none;
-      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+      box-shadow: 0 4px 15px rgba(255, 105, 180, 0.4),
+                  0 0 0 3px rgba(255, 105, 180, 0.2);
     }
 
     /* 图标样式 */
@@ -172,35 +386,42 @@ var _czc = _czc || [];
 
     /* 模态框背景 */
     .modal-backdrop {
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: none !important;
+      background: rgba(255, 182, 193, 0.2);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
     }
 
     /* 标题栏样式 */
     .modal .titlebar {
-      padding: 16px 20px;
-      border-bottom: 1px solid #e0e0e0;
+      padding: 20px 24px;
+      border-bottom: 1px solid rgba(255, 192, 203, 0.3);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
+      background: linear-gradient(135deg, 
+                  rgba(255, 240, 245, 0.5) 0%, 
+                  rgba(255, 228, 225, 0.3) 100%);
     }
 
     .modal .titlebar .icon {
-      font-size: 20px;
+      font-size: 22px;
+      filter: drop-shadow(0 2px 4px rgba(255, 105, 180, 0.3));
     }
 
     .modal .titlebar .title {
-      font-weight: bold;
-      color: #333;
-      font-size: 16px;
+      font-weight: 600;
+      color: #ff69b4;
+      font-size: 18px;
+      text-shadow: 0 2px 4px rgba(255, 182, 193, 0.3);
     }
 
     /* 内容区域 */
     .modal .content {
-      padding: 20px;
-      color: #333;
-      font-size: 14px;
-      line-height: 1.5;
+      padding: 24px;
+      color: #d63384;
+      font-size: 15px;
+      line-height: 1.6;
+      background: rgba(255, 255, 255, 0.3);
     }
 
     /* 按钮容器右下角对齐 */
@@ -208,13 +429,18 @@ var _czc = _czc || [];
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      padding: 16px 20px;
-      gap: 10px;
+      padding: 20px 24px;
+      gap: 12px;
+      background: linear-gradient(135deg, 
+                  rgba(255, 228, 225, 0.3) 0%, 
+                  rgba(255, 240, 245, 0.5) 100%);
+      border-top: 1px solid rgba(255, 192, 203, 0.3);
     }
 
   </style>
 </head>
 <body>
+  <div id="particle-heart"></div>
   <div id="app">
     <div class="modal-backdrop" id="start-backdrop" aria-hidden="false">
       <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
@@ -239,14 +465,17 @@ var _czc = _czc || [];
     function createHeart() {
       const heart = document.createElement('div');
       heart.className = 'heart';
-      heart.textContent = '❤️';
-      const left = Math.random() * 100;
-      const duration = Math.random() * 10 + 10;
-      const fontSize = Math.random() * 15 + 15;
+      // 随机选择不同的爱心符号
+      const hearts = ['❤️', '💕', '💖', '💗', '💓', '💝', '💞'];
+      heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+      const left = Math.random() * 90 + 5; // 5% 到 95%
+      const duration = Math.random() * 8 + 6; // 6到14秒
+      const fontSize = Math.random() * 20 + 20; // 20到40px
       
       heart.style.left = left + '%';
       heart.style.animationDuration = duration + 's';
       heart.style.fontSize = fontSize + 'px';
+      heart.style.animationName = 'floatUp';
       
       document.body.appendChild(heart);
 
@@ -304,11 +533,170 @@ var _czc = _czc || [];
         setTimeout(() => createBubble(), i * 1000);
       }
 
-      // 持续创建爱心（降低频率）
-      setInterval(createHeart, 3000);
+      // 持续创建爱心（更频繁，营造浪漫氛围）
+      setInterval(createHeart, 1200);
 
       // 持续创建泡泡（降低频率）
       setInterval(createBubble, 2500);
+    }
+
+    // 创建粒子爱心
+    function createParticleHeart() {
+      const container = document.getElementById('particle-heart');
+      if (!container) return Promise.resolve();
+
+      // 爱心参数方程：x = 16sin³(t), y = 13cos(t) - 5cos(2t) - 2cos(3t) - cos(4t)
+      const scale = Math.min(window.innerWidth, window.innerHeight) * 0.4; // 爱心大小（增大）
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      const particleCount = 800; // 粒子数量（增加，让爱心更饱满）
+
+      // 存储所有点以便均匀分布
+      const points = [];
+      let maxTotalTime = 0; // 记录最长的动画时间
+      
+      // 生成爱心轮廓点
+      for (let i = 0; i < particleCount; i++) {
+        const t = (i / particleCount) * Math.PI * 2; // 从0到2π
+        
+        // 爱心参数方程
+        const x = 16 * Math.pow(Math.sin(t), 3);
+        const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+        
+        // 计算目标位置
+        const targetX = centerX + x * scale / 16;
+        const targetY = centerY - y * scale / 16; // 负号翻转Y轴使爱心正向
+        
+        points.push({ targetX, targetY });
+      }
+
+      // 创建粒子
+      points.forEach((point, index) => {
+        // 随机生成起始位置（屏幕四周）
+        let startX, startY;
+        const side = Math.floor(Math.random() * 4); // 0-3: 上右下左
+        
+        switch(side) {
+          case 0: // 上边
+            startX = Math.random() * window.innerWidth;
+            startY = -50;
+            break;
+          case 1: // 右边
+            startX = window.innerWidth + 50;
+            startY = Math.random() * window.innerHeight;
+            break;
+          case 2: // 下边
+            startX = Math.random() * window.innerWidth;
+            startY = window.innerHeight + 50;
+            break;
+          case 3: // 左边
+            startX = -50;
+            startY = Math.random() * window.innerHeight;
+            break;
+        }
+
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        
+        // 设置起始位置
+        particle.style.left = startX + 'px';
+        particle.style.top = startY + 'px';
+        
+        // 计算动画延迟（分批到达）
+        const delay = (index / particleCount) * 3 + Math.random() * 0.5; // 3秒内分批到达
+        const duration = 2 + Math.random() * 1; // 2-3秒飞行时间
+        
+        // 计算位移量
+        const deltaX = point.targetX - startX;
+        const deltaY = point.targetY - startY;
+        
+        // 使用CSS变量存储目标位置
+        particle.style.setProperty('--target-x', deltaX + 'px');
+        particle.style.setProperty('--target-y', deltaY + 'px');
+        
+        // 添加飞行动画
+        particle.style.animation = `particleFlyTo ${duration}s ease-out ${delay}s forwards`;
+        
+        // 添加更丰富的颜色变化（白色到粉色到红色渐变）
+        const colorVariant = Math.random();
+        let red, green, blue, alpha;
+        
+        if (colorVariant < 0.3) {
+          // 亮白色
+          red = 255;
+          green = 255;
+          blue = 255;
+          alpha = Math.random() * 0.3 + 0.7;
+        } else if (colorVariant < 0.6) {
+          // 浅粉色
+          red = 255;
+          green = Math.floor(192 + Math.random() * 30);
+          blue = Math.floor(203 + Math.random() * 20);
+          alpha = Math.random() * 0.3 + 0.7;
+        } else if (colorVariant < 0.85) {
+          // 粉色
+          red = 255;
+          green = Math.floor(105 + Math.random() * 80);
+          blue = Math.floor(180 + Math.random() * 20);
+          alpha = Math.random() * 0.3 + 0.7;
+        } else {
+          // 深粉色/红色
+          red = 255;
+          green = Math.floor(20 + Math.random() * 60);
+          blue = Math.floor(147 + Math.random() * 40);
+          alpha = Math.random() * 0.3 + 0.8;
+        }
+        
+        particle.style.background = `radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(${red}, ${green}, ${blue}, ${alpha}) 100%)`;
+        particle.style.boxShadow = `0 0 8px rgba(${red}, ${green}, ${blue}, 0.8), 
+                                     0 0 15px rgba(${red}, ${green}, ${blue}, 0.6),
+                                     0 0 25px rgba(${red}, ${green}, ${blue}, 0.4)`;
+        
+        // 根据位置调整大小（更大的变化范围）
+        const sizeVariation = Math.random() * 0.8 + 1;
+        particle.style.width = (5 * sizeVariation) + 'px';
+        particle.style.height = (5 * sizeVariation) + 'px';
+        
+        container.appendChild(particle);
+        
+        // 动画结束后更新位置并添加脉动效果
+        const totalTime = (delay + duration) * 1000;
+        maxTotalTime = Math.max(maxTotalTime, totalTime);
+        
+        setTimeout(() => {
+          // 更新到最终位置
+          particle.style.left = point.targetX + 'px';
+          particle.style.top = point.targetY + 'px';
+          particle.style.transform = 'translate(0, 0)';
+          // 添加随机延迟让脉动更自然
+          const pulseDelay = Math.random() * 2;
+          particle.style.animation = `particlePulse ${1.5 + Math.random() * 0.5}s ease-in-out ${pulseDelay}s infinite`;
+        }, totalTime);
+      });
+
+      // 返回Promise，在爱心形成后resolve
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          // 爱心形成后添加跳动效果
+          container.classList.add('beat');
+          resolve();
+        }, maxTotalTime + 500); // 等待所有粒子到达后额外0.5秒
+      });
+    }
+
+    // 显示弹窗
+    function showModal() {
+      const backdrop = document.getElementById('start-backdrop');
+      const modal = backdrop ? backdrop.querySelector('.modal') : null;
+      
+      if (backdrop && modal) {
+        // 显示背景
+        backdrop.classList.add('show');
+        // 延迟一点显示弹窗，让背景先出现
+        setTimeout(() => {
+          modal.classList.add('show');
+        }, 100);
+      }
     }
 
     // 点击确定按钮时打开1111.html
@@ -322,6 +710,11 @@ var _czc = _czc || [];
 
       // 启动背景特效
       startBackgroundEffects();
+
+      // 创建粒子爱心，爱心形成后显示弹窗
+      createParticleHeart().then(() => {
+        showModal();
+      });
     });
   </script>
 </body>
