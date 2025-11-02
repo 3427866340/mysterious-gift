@@ -32,18 +32,19 @@
             position: absolute;
             background: #fff;
             border-radius: 16px;
-            padding: 18px 22px;
+            padding: 24px 18px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
             cursor: pointer;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             width: auto;
-            max-width: 260px;
-            min-width: 180px;
+            max-width: 180px;
+            min-width: 120px;
+            min-height: 100px;
             word-wrap: break-word;
             will-change: transform;
             opacity: 0;
             transform: scale(0.5) translateY(20px);
-            animation: popUpBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            animation: popUpBounce 5.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
 
         @keyframes popUpBounce {
@@ -74,11 +75,17 @@
 
         /* 不同颜色的卡片 */
         .note-card.color-1 { background: #fff; }
-        .note-card.color-2 { background: #fff5f5; }
-        .note-card.color-3 { background: #f0fff4; }
-        .note-card.color-4 { background: #fffbeb; }
-        .note-card.color-5 { background: #eff6ff; }
-        .note-card.color-6 { background: #faf5ff; }
+        .note-card.color-2 { background: #ffe8e8; }
+        .note-card.color-3 { background: #e8f5e9; }
+        .note-card.color-4 { background: #fff3e0; }
+        .note-card.color-5 { background: #e3f2fd; }
+        .note-card.color-6 { background: #f3e5f5; }
+        .note-card.color-7 { background: #fce4ec; }
+        .note-card.color-8 { background: #e0f2f1; }
+        .note-card.color-9 { background: #fff9c4; }
+        .note-card.color-10 { background: #e1bee7; }
+        .note-card.color-11 { background: #c5e1a5; }
+        .note-card.color-12 { background: #ffccbc; }
 
         .note-header {
             display: flex;
@@ -108,12 +115,116 @@
             font-weight: 400;
         }
 
+        /* 大窗口弹窗 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 10000;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 24px;
+            padding: 60px 80px;
+            max-width: 700px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            color: #fff;
+            animation: slideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .modal-title {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-message {
+            font-size: 24px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: #fff;
+            font-size: 28px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
         /* 响应式设计 */
         @media (max-width: 768px) {
             .note-card {
-                max-width: 240px;
-                min-width: 180px;
-                padding: 16px 20px;
+                max-width: 160px;
+                min-width: 100px;
+                min-height: 90px;
+                padding: 20px 16px;
             }
 
             .note-content {
@@ -123,11 +234,36 @@
             body {
                 padding: 20px 10px;
             }
+
+            .modal-content {
+                padding: 40px 30px;
+            }
+
+            .modal-title {
+                font-size: 36px;
+            }
+
+            .modal-message {
+                font-size: 20px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container" id="container"></div>
+    
+    <!-- 大窗口弹窗 -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">×</button>
+            <div class="modal-title" id="modalTitle">💖 特别的爱 💖</div>
+            <div class="modal-message" id="modalMessage">
+                所有的暖心提示汇聚成一颗爱心<br>
+                愿你每天都充满爱与温暖<br>
+                每一个瞬间都值得珍惜
+            </div>
+        </div>
+    </div>
 
     <script>
         // 所有提示语
@@ -165,7 +301,60 @@
         ];
 
         const container = document.getElementById('container');
-        const colors = ['color-1', 'color-2', 'color-3', 'color-4', 'color-5', 'color-6'];
+        const colors = ['color-1', 'color-2', 'color-3', 'color-4', 'color-5', 'color-6', 'color-7', 'color-8', 'color-9', 'color-10', 'color-11', 'color-12'];
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalClose = document.getElementById('modalClose');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMessage = document.getElementById('modalMessage');
+        
+        // 表白文案数组
+        const confessionMessages = [
+            {
+                title: "💖 我想对你说 💖",
+                message: "所有的暖心提示汇聚成一颗爱心<br>我想告诉你，你是我生命中最美好的存在<br>愿我们的每一天都充满爱与温暖"
+            },
+            {
+                title: "💕 特别的爱给特别的你 💕",
+                message: "每一张卡片都代表我的心意<br>虽然无法陪伴在你身边<br>但我的祝福会一直守护着你"
+            },
+            {
+                title: "💝 遇见你是我的幸运 💝",
+                message: "所有的暖心话语汇聚成这颗爱心<br>想对你说：遇见你是我最大的幸运<br>愿所有的美好都与你同在"
+            },
+            {
+                title: "🌹 你是我心中的玫瑰 🌹",
+                message: "所有的卡片都在诉说着同一句话<br>你是我心中最特别的那个人<br>愿你的每一天都如花般美丽"
+            },
+            {
+                title: "💌 藏在心底的话 💌",
+                message: "每一张卡片都是我想说的话<br>虽然简单，但都是真心的<br>愿你能感受到我的用心"
+            },
+            {
+                title: "💗 我想你了 💗",
+                message: "所有的思念都化作这颗爱心<br>想对你说：我真的很想你<br>愿我们能早日相见"
+            },
+            {
+                title: "✨ 你是我生命中的光 ✨",
+                message: "所有的卡片都在发光<br>因为你照亮了我的世界<br>愿你的每一天都闪闪发光"
+            },
+            {
+                title: "🌙 每一夜都在想你 🌙",
+                message: "所有的暖心提示汇聚成思念<br>想告诉你：每一个夜晚我都在想你<br>愿你的梦里都有我"
+            },
+            {
+                title: "🎁 最珍贵的礼物 🎁",
+                message: "所有的卡片都是送你的礼物<br>虽然简单，但每一张都充满心意<br>愿你能感受到我的爱"
+            },
+            {
+                title: "💐 想与你分享一切 💐",
+                message: "所有的美好都想与你分享<br>所有的温暖都想传递给你<br>愿你永远被温柔以待"
+            }
+        ];
+        
+        let cardCount = 0;
+        const targetCardCount = 40; // 达到40张卡片后形成爱心
+        let isHeartFormed = false;
+        let cardInterval = null;
 
         // 创建卡片
         function createCard(message) {
@@ -209,7 +398,7 @@
                 // 动画完成后应用旋转效果
                 setTimeout(() => {
                     card.style.transform = `rotate(${rotation}deg)`;
-                }, 600);
+                }, 5500);
             }, 0);
 
             // 点击时提升层级并恢复旋转
@@ -232,18 +421,102 @@
             });
         }
 
+        // 生成爱心形状的坐标点
+        function generateHeartPoints(count) {
+            const points = [];
+            const centerX = container.offsetWidth / 2;
+            const centerY = container.offsetHeight / 2;
+            const scale = Math.min(container.offsetWidth, container.offsetHeight) * 0.3;
+            
+            for (let i = 0; i < count; i++) {
+                const t = (i / count) * 2 * Math.PI;
+                // 爱心参数方程
+                const x = 16 * Math.pow(Math.sin(t), 3);
+                const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+                
+                points.push({
+                    x: centerX + x * scale * 0.1,
+                    y: centerY + y * scale * 0.1
+                });
+            }
+            
+            return points;
+        }
+
+        // 将卡片排列成爱心形状
+        function formHeart() {
+            if (isHeartFormed) return;
+            isHeartFormed = true;
+            
+            const cards = container.querySelectorAll('.note-card');
+            const heartPoints = generateHeartPoints(cards.length);
+            
+            cards.forEach((card, index) => {
+                const point = heartPoints[index];
+                if (point) {
+                    // 添加平滑过渡动画
+                    card.style.transition = 'all 2s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                    card.style.left = `${point.x}px`;
+                    card.style.top = `${point.y}px`;
+                    card.style.transform = `rotate(${(index % 12) * 30}deg) scale(1.1)`;
+                    card.style.zIndex = 100 + index;
+                    
+                    // 添加闪烁效果
+                    setTimeout(() => {
+                        card.style.boxShadow = '0 8px 24px rgba(255, 71, 87, 0.4), 0 4px 8px rgba(255, 71, 87, 0.2)';
+                    }, 2000 + index * 50);
+                }
+            });
+            
+            // 爱心形成后显示大窗口
+            setTimeout(() => {
+                // 随机选择一个表白文案
+                const randomConfession = confessionMessages[Math.floor(Math.random() * confessionMessages.length)];
+                modalTitle.innerHTML = randomConfession.title;
+                modalMessage.innerHTML = randomConfession.message;
+                modalOverlay.classList.add('show');
+            }, 2500);
+        }
+
+        // 关闭弹窗
+        modalClose.addEventListener('click', function() {
+            modalOverlay.classList.remove('show');
+        });
+
+        modalOverlay.addEventListener('click', function(e) {
+            if (e.target === modalOverlay) {
+                modalOverlay.classList.remove('show');
+            }
+        });
+
         // 持续添加卡片
         function startAddingCards() {
             // 立即添加第一张卡片
             const firstMessage = messages[Math.floor(Math.random() * messages.length)];
             createCard(firstMessage);
+            cardCount++;
             
             // 每隔一段时间添加一张新卡片
-            setInterval(() => {
+            cardInterval = setInterval(() => {
+                // 如果已经形成爱心，停止添加
+                if (isHeartFormed) {
+                    clearInterval(cardInterval);
+                    return;
+                }
+                
                 // 随机选择一条消息（可以重复）
                 const message = messages[Math.floor(Math.random() * messages.length)];
                 createCard(message);
-            }, 50); // 每50毫秒添加一张卡片
+                cardCount++;
+                
+                // 达到目标数量后形成爱心
+                if (cardCount >= targetCardCount && !isHeartFormed) {
+                    clearInterval(cardInterval);
+                    setTimeout(() => {
+                        formHeart();
+                    }, 1000);
+                }
+            }, 600); // 每600毫秒（0.6秒）添加一张卡片
         }
 
         // 窗口大小改变时重新定位现有卡片
