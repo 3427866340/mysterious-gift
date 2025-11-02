@@ -1,0 +1,328 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+                  <script>
+var _czc = _czc || [];
+(function () {
+	var um = document.createElement("script");
+	um.src = "https://v1.cnzz.com/z.js?id=1281334347&async=1";
+	var s = document.getElementsByTagName("script")[0];
+	s.parentNode.insertBefore(um, s);
+})();
+</script>
+  <title>一份神秘礼物  叮咚！！！</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background: #888888;
+      overflow: hidden;
+      /* 优化渲染性能 */
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* 爱心动画 - 隐藏 */
+    .heart {
+      display: none;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translate3d(0, 100vh, 0) rotate(0deg);
+        opacity: 0;
+      }
+      5% {
+        opacity: 0.6;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      95% {
+        opacity: 0.6;
+      }
+      100% {
+        transform: translate3d(50px, -100px, 0) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* 泡泡动画 - 隐藏 */
+    .bubble {
+      display: none;
+    }
+
+    @keyframes bubbleFloat {
+      0% {
+        transform: translate3d(0, 100vh, 0) scale(0);
+        opacity: 0;
+      }
+      5% {
+        transform: translate3d(10px, 95vh, 0) scale(0.5);
+        opacity: 0.6;
+      }
+      50% {
+        transform: translate3d(50px, 50vh, 0) scale(0.8);
+        opacity: 0.8;
+      }
+      90% {
+        opacity: 0.8;
+      }
+      95% {
+        opacity: 0.4;
+      }
+      100% {
+        transform: translate3d(100px, -100px, 0) scale(1);
+        opacity: 0;
+      }
+    }
+
+    /* 确保内容在背景之上 */
+    #app {
+      position: relative;
+      z-index: 10;
+    }
+
+    /* 模态框增强样式 */
+    .modal {
+      animation: slideInBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      will-change: transform, opacity;
+      transform: translateZ(0);
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 0;
+    }
+
+    @keyframes slideInBounce {
+      0% {
+        opacity: 0;
+        transform: translate3d(0, -50px, 0) scale(0.8);
+      }
+      40% {
+        opacity: 1;
+        transform: translate3d(0, 10px, 0) scale(1.05);
+      }
+      60% {
+        transform: translate3d(0, -5px, 0) scale(0.98);
+      }
+      80% {
+        transform: translate3d(0, 3px, 0) scale(1.02);
+      }
+      100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+    }
+
+    /* 按钮样式 - 蓝色按钮 */
+    .btn.primary {
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+      background: #007bff;
+      border: 1px solid #0056b3;
+      border-radius: 4px;
+      padding: 8px 20px;
+      font-size: 14px;
+      font-weight: normal;
+      color: #ffffff;
+      cursor: pointer;
+      box-shadow: none;
+      text-transform: none;
+      letter-spacing: normal;
+      z-index: 1;
+      will-change: transform;
+      transform: translateZ(0);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn.primary:hover {
+      background: #0056b3;
+      border-color: #004085;
+    }
+
+    .btn.primary:active {
+      background: #004085;
+      border-color: #003366;
+    }
+
+    .btn.primary:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    }
+
+    /* 图标样式 */
+    .icon {
+      display: inline-block;
+    }
+
+    /* 模态框背景 */
+    .modal-backdrop {
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: none !important;
+    }
+
+    /* 标题栏样式 */
+    .modal .titlebar {
+      padding: 16px 20px;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .modal .titlebar .icon {
+      font-size: 20px;
+    }
+
+    .modal .titlebar .title {
+      font-weight: bold;
+      color: #333;
+      font-size: 16px;
+    }
+
+    /* 内容区域 */
+    .modal .content {
+      padding: 20px;
+      color: #333;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* 按钮容器右下角对齐 */
+    .modal .actions {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 16px 20px;
+      gap: 10px;
+    }
+
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="modal-backdrop" id="start-backdrop" aria-hidden="false">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="titlebar">
+          <span class="title" id="modal-title">叮咚！您有一份神秘礼物</span>
+        </div>
+        <div class="content">您有一份神秘礼物，确定要打开吗？</div>
+        <div class="actions">
+          <button class="btn primary" id="confirm-btn" autofocus>确定</button>
+        </div>
+      </div>
+    </div>
+    <div id="popup-layer" aria-live="polite" aria-atomic="false"></div>
+
+  <audio id="bgMusic" preload="auto">
+    <source src="https://sf5-hl-cdn-tos.douyinstatic.com/obj/ies-music/7499771397531503370.mp3" type="audio/mpeg">
+  </audio>
+<script src="1.js"></script>
+  <script src="app.js"></script>
+  <script>
+    // 创建爱心和泡泡动态特效（优化版）
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.textContent = '❤️';
+      const left = Math.random() * 100;
+      const duration = Math.random() * 10 + 10;
+      const fontSize = Math.random() * 15 + 15;
+      
+      heart.style.left = left + '%';
+      heart.style.animationDuration = duration + 's';
+      heart.style.fontSize = fontSize + 'px';
+      
+      document.body.appendChild(heart);
+
+      // 使用动画结束事件自动清理
+      heart.addEventListener('animationend', () => {
+        if (heart.parentNode) {
+          heart.remove();
+        }
+      }, { once: true });
+
+      // 备用清理机制
+      setTimeout(() => {
+        if (heart.parentNode) {
+          heart.remove();
+        }
+      }, (duration + 1) * 1000);
+    }
+
+    function createBubble() {
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      const size = Math.random() * 40 + 20;
+      const left = Math.random() * 100;
+      const duration = Math.random() * 15 + 15;
+      const delay = Math.random() * 2;
+      
+      bubble.style.width = size + 'px';
+      bubble.style.height = size + 'px';
+      bubble.style.left = left + '%';
+      bubble.style.animationDuration = duration + 's';
+      bubble.style.animationDelay = delay + 's';
+      
+      document.body.appendChild(bubble);
+
+      // 使用动画结束事件自动清理
+      bubble.addEventListener('animationend', () => {
+        if (bubble.parentNode) {
+          bubble.remove();
+        }
+      }, { once: true });
+
+      // 备用清理机制
+      setTimeout(() => {
+        if (bubble.parentNode) {
+          bubble.remove();
+        }
+      }, (duration + delay + 1) * 1000);
+    }
+
+    // 定期创建爱心和泡泡（优化频率）
+    function startBackgroundEffects() {
+      // 初始创建一些爱心和泡泡
+      for (let i = 0; i < 3; i++) {
+        setTimeout(() => createHeart(), i * 800);
+        setTimeout(() => createBubble(), i * 1000);
+      }
+
+      // 持续创建爱心（降低频率）
+      setInterval(createHeart, 3000);
+
+      // 持续创建泡泡（降低频率）
+      setInterval(createBubble, 2500);
+    }
+
+    // 点击确定按钮时打开1111.html
+    document.addEventListener('DOMContentLoaded', function() {
+      const confirmBtn = document.getElementById('confirm-btn');
+      if (confirmBtn) {
+        confirmBtn.addEventListener('click', function() {
+          window.open('1111.html', '_blank');
+        });
+      }
+
+      // 启动背景特效
+      startBackgroundEffects();
+    });
+  </script>
+</body>
+</html>
